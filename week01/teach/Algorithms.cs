@@ -27,7 +27,7 @@ public static class Algorithms {
 
         sw.Stop();
         return sw.Elapsed.TotalMilliseconds / times;
-    }
+    } 
 
     /// <summary>
     /// The count variable is keeping track of the amount
