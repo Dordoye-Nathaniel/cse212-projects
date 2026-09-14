@@ -1,6 +1,9 @@
 /// <summary>
 /// A basic implementation of a Queue
 /// </summary>
+/// Changed insert(0, person) to add(person) to fix the bug in the Dequeue method.  
+/// The insert(0, person) was causing the queue to be reversed and not follow FIFO rules.
+
 public class PersonQueue
 {
     private readonly List<Person> _queue = new();
@@ -13,7 +16,7 @@ public class PersonQueue
     /// <param name="person">The person to add</param>
     public void Enqueue(Person person)
     {
-        _queue.Insert(0, person);
+        _queue.Add(person);
     }
 
     public Person Dequeue()

@@ -7,6 +7,12 @@
 /// less than they will stay in the queue forever.  If a person is out of turns then they will 
 /// not be added back into the queue.
 /// </summary>
+/// 
+/// 
+/// Changes made to the TakingTurnsQueue class in the TakingTurnsQueue.cs file to fix the bug in the GetNextPerson method.
+/// Added an explicit person.Turns <= 0 branch that re-enqueues 
+/// the person without decrementing — preserving "infinite" status 
+/// forever instead of letting it decay.
 public class TakingTurnsQueue
 {
     private readonly PersonQueue _people = new();
@@ -37,17 +43,22 @@ public class TakingTurnsQueue
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-        else
-        {
-            Person person = _people.Dequeue();
-            if (person.Turns > 1)
-            {
-                person.Turns -= 1;
-                _people.Enqueue(person);
-            }
 
-            return person;
+        Person person = _people.Dequeue();
+
+        if (person.Turns <= 0)
+        {
+            // Infinite turns: re-enqueue as-is, don't decrement
+            _people.Enqueue(person);
         }
+        else if (person.Turns > 1)
+        {
+            person.Turns -= 1;
+            _people.Enqueue(person);
+        }
+        // else Turns == 1: this was their last turn, don't re-enqueue
+
+        return person;
     }
 
     public override string ToString()
