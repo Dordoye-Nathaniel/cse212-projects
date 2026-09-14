@@ -16,7 +16,7 @@ public class PersonQueue
     /// <param name="person">The person to add</param>
     public void Enqueue(Person person)
     {
-        _queue.Add(person);
+        _queue.Add(person); // Changed from insert(0, person) to add(person) to fix the bug in the Dequeue method.
     }
 
     public Person Dequeue()
