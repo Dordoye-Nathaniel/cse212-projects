@@ -21,8 +21,28 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // Problem 1 - ADD YOUR CODE HERE
+        var result = new List<string>();
+        var seen = new HashSet<string>(); // tracks words we've already passed over
+
+        foreach (var word in words)
+        {
+            // build the reversed version of this word, e.g. "am" -> "ma"
+            var reversed = new string(new[] { word[1], word[0] });
+
+            // if we already saw the reverse of this word, we found a pair
+            if (seen.Contains(reversed))
+            {
+                result.Add($"{word} & {reversed}");
+            }
+            else
+            {
+                // otherwise remember this word so a later word can match against it
+                seen.Add(word);
+            }
+        }
+
+        return result.ToArray();
     }
 
     /// <summary>
@@ -42,7 +62,20 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+
+            // Problem 2 - ADD YOUR CODE HERE
+            // degree information is in the 4th column (index 3)
+            var degree = fields[3].Trim();
+
+            // increment the count for this degree, or start it at 1 if new
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree] += 1;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -66,8 +99,38 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Problem 3 - ADD YOUR CODE HERE
+        var letterCounts = new Dictionary<char, int>();
+
+        // count each letter's occurrences in word1 (spaces stripped, lowercased)
+        foreach (var c in word1.Replace(" ", "").ToLower())
+        {
+            if (letterCounts.ContainsKey(c))
+            {
+                letterCounts[c] += 1;
+            }
+            else
+            {
+                letterCounts[c] = 1;
+            }
+        }
+
+        // walk word2 and decrement matching letter counts
+        foreach (var c in word2.Replace(" ", "").ToLower())
+        {
+            if (letterCounts.ContainsKey(c))
+            {
+                letterCounts[c] -= 1;
+            }
+            else
+            {
+                // word2 has a letter word1 never had at all -> not an anagram
+                return false;
+            }
+        }
+
+        // if every count nets out to exactly 0, the letters matched up perfectly
+        return letterCounts.Values.All(count => count == 0);
     }
 
     /// <summary>
@@ -96,11 +159,18 @@ public static class SetsAndMaps
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO Problem 5:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
-        // 3. Return an array of these string descriptions.
-        return [];
+        // Problem 5, step 2 - create a string for each earthquake with its place and magnitude
+        var summaries = new List<string>();
+
+        if (featureCollection?.Features != null)
+        {
+            foreach (var feature in featureCollection.Features)
+            {
+                summaries.Add($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+            }
+        }
+
+        // Problem 5, step 3 - return the array of description strings
+        return summaries.ToArray();
     }
 }

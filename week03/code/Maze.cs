@@ -25,14 +25,24 @@ public class Maze
         _mazeMap = mazeMap;
     }
 
-    // TODO Problem 4 - ADD YOUR CODE HERE
+    // Problem 4 - ADD YOUR CODE HERE
     /// <summary>
     /// Check to see if you can move left.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        // index 0 of the bool[] at the current position represents "left"
+        if (_mazeMap[(_currX, _currY)][0])
+        {
+            // no wall - move left by decreasing x
+            _currX -= 1;
+        }
+        else
+        {
+            // wall present - can't move this direction
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -41,7 +51,17 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        // index 1 of the bool[] at the current position represents "right"
+        if (_mazeMap[(_currX, _currY)][1])
+        {
+            // no wall - move right by increasing x
+            _currX += 1;
+        }
+        else
+        {
+            // wall present - can't move this direction
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -50,7 +70,17 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        // index 2 of the bool[] at the current position represents "up"
+        if (_mazeMap[(_currX, _currY)][2])
+        {
+            // no wall - move up by decreasing y
+            _currY -= 1;
+        }
+        else
+        {
+            // wall present - can't move this direction
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -59,7 +89,17 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        // index 3 of the bool[] at the current position represents "down"
+        if (_mazeMap[(_currX, _currY)][3])
+        {
+            // no wall - move down by increasing y
+            _currY += 1;
+        }
+        else
+        {
+            // wall present - can't move this direction
+            throw new InvalidOperationException("Can't go that way!");
+        }
     }
 
     public string GetStatus()
